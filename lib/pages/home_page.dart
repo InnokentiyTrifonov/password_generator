@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     setState(() {
       if (_passController.text.isNotEmpty) {
         data.data.add([_nameController.text, _passController.text]);
+        Navigator.pop(context);
         _nameController.clear();
         _passController.clear();
         data.boolUCL = false;

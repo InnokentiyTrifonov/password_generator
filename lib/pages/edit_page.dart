@@ -45,7 +45,7 @@ class EditPage extends StatelessWidget {
                 save: () {
                   if (nameKey.currentState!.validate() &&
                       passKey.currentState!.validate()) {
-                    data.data[index][0] = nameController.text;
+                    data.data[index][0] = nameController.text.trim();
                     data.data[index][1] = passController.text;
                     saveEdited();
                   }

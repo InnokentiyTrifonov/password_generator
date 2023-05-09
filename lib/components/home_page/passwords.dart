@@ -45,8 +45,14 @@ class Passwords extends StatelessWidget {
               color: Theme.of(context).primaryColor),
           child: ListTile(
             onLongPress: copyThePassword,
-            title: Text(name),
-            subtitle: Text(password),
+            title: Text(
+              name,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            subtitle: Text(
+              password,
+              style: const TextStyle(fontSize: 15),
+            ),
           ),
         ),
       ),

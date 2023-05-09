@@ -20,7 +20,6 @@ class _PasswordManagerState extends State<PasswordManager> {
             theme: ThemeData(
                 appBarTheme: const AppBarTheme(
                     iconTheme: IconThemeData(color: Colors.black),
-                    centerTitle: true,
                     titleTextStyle: TextStyle(
                       color: Colors.black,
                       fontSize: 20,

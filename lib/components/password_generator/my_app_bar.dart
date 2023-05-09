@@ -20,7 +20,12 @@ class MyAppBar extends StatelessWidget {
               Icons.arrow_back_ios_new_outlined,
               size: 18,
             )),
-        const Text('Password generator'),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Password generator'),
+          ],
+        ),
         IconButton(onPressed: save, icon: const Icon(Icons.check)),
       ],
     );

@@ -1,6 +1,28 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class PasswordGenerator {
+  static ValueNotifier<bool> themeData = ValueNotifier<bool>(false);
+
+  static Box box = Hive.box('myBox');
+
+  static void initTheme() {
+    if (box.get('THEME') == null) {
+      PasswordGenerator.themeData.value = false;
+    } else {
+      loadThemeData();
+    }
+  }
+
+  static void loadThemeData() {
+    themeData.value = box.get('THEME');
+  }
+
+  static void uploadThemeData() {
+    box.put('THEME', PasswordGenerator.themeData.value);
+  }
+
   List data = [];
 
   String upperCaseLetter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

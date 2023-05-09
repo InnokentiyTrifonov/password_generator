@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:password_generator/app/app.dart';
+import 'package:password_generator/data/password_generator.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -20,5 +21,6 @@ Future<void> main() async {
     await Hive.openBox('myBox',
         encryptionCipher: HiveAesCipher(encryptionKeyUint8List));
   }
+  PasswordGenerator.initTheme();
   runApp(const PasswordManager());
 }

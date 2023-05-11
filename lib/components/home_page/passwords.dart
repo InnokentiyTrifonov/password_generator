@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Passwords extends StatelessWidget {
   final String name;
+  final String login;
   final String password;
-  final VoidCallback copyThePassword;
   final Function(BuildContext)? deletePassword;
   final Function(BuildContext)? editPassword;
   const Passwords({
@@ -12,8 +13,8 @@ class Passwords extends StatelessWidget {
     required this.name,
     required this.password,
     required this.deletePassword,
-    required this.copyThePassword,
     this.editPassword,
+    required this.login,
   });
 
   @override
@@ -39,22 +40,55 @@ class Passwords extends StatelessWidget {
               )
             ]),
         child: Container(
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Theme.of(context).primaryColor),
-          child: ListTile(
-            onLongPress: copyThePassword,
-            title: Text(
-              name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            subtitle: Text(
-              password,
-              style: const TextStyle(fontSize: 15),
-            ),
-          ),
-        ),
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).primaryColor),
+            child: Theme(
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                title: Text(name),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(login),
+                      IconButton(
+                        onPressed: () {
+                          final copiedPass = ClipboardData(text: login);
+                          Clipboard.setData(copiedPass);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('login copied'),
+                                  backgroundColor: Colors.green,
+                                  duration: Duration(seconds: 1)));
+                        },
+                        icon: const Icon(Icons.copy_outlined),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(password),
+                      IconButton(
+                        onPressed: () {
+                          final copiedPass = ClipboardData(text: password);
+                          Clipboard.setData(copiedPass);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Password copied'),
+                                  backgroundColor: Colors.green,
+                                  duration: Duration(seconds: 1)));
+                        },
+                        icon: const Icon(Icons.copy_outlined),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )),
       ),
     );
   }

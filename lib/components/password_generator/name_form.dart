@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class NameFormField extends StatefulWidget {
+class NameForm extends StatefulWidget {
   final GlobalKey<FormState> nameKey;
   final TextEditingController nameController;
-  const NameFormField(
+  const NameForm(
       {super.key, required this.nameController, required this.nameKey});
 
   @override
-  State<NameFormField> createState() => _NameFormFieldState();
+  State<NameForm> createState() => _NameFormState();
 }
 
-class _NameFormFieldState extends State<NameFormField> {
+class _NameFormState extends State<NameForm> {
   @override
   Widget build(BuildContext context) {
     return Form(

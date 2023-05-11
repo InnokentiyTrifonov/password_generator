@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:password_generator/components/home_page/passwords.dart';
 import 'package:password_generator/data/password_generator.dart';
@@ -14,8 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  final logKey = GlobalKey<FormState>();
   final passKey = GlobalKey<FormState>();
   final nameKey = GlobalKey<FormState>();
+  final _logController = TextEditingController();
   final _nameController = TextEditingController();
   final _passController = TextEditingController();
   PasswordGenerator data = PasswordGenerator();
@@ -55,12 +56,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     PasswordGenerator.themeData.dispose();
     _nameController;
     _passController;
+    _logController;
     super.dispose();
   }
 
   void editPass(int index) {
     setState(() {
-      data.data[index] = [_nameController.text.trim(), _passController.text];
+      data.data[index] = [
+        _nameController.text.trim(),
+        _logController.text,
+        _passController.text,
+      ];
     });
   }
 
@@ -72,32 +78,45 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void createNewPass() {
-    showDialog(
-        context: context,
-        builder: (context) => PasswordGeneratorPage(
-              nameController: _nameController,
-              passController: _passController,
-              data: data,
-              saveInList: saveInList,
-              back: back,
-              passKey: passKey,
-              nameKey: nameKey,
-            ));
+    _nameController.clear();
+    _logController.clear();
+    _passController.clear();
+    data.boolUCL = false;
+    data.boolSC = false;
+    data.boolN = false;
+    data.passwordLenght = 0;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PasswordGeneratorPage(
+                  logController: _logController,
+                  nameController: _nameController,
+                  passController: _passController,
+                  data: data,
+                  saveInList: saveInList,
+                  back: back,
+                  passKey: passKey,
+                  nameKey: nameKey,
+                  loginKey: logKey,
+                )));
   }
 
   void editPassword(int index) {
-    showDialog(
-        context: context,
-        builder: (context) => EditPage(
-              data: data,
-              index: index,
-              nameController: _nameController,
-              passController: _passController,
-              saveEdited: saveEdited,
-              back: back,
-              passKey: passKey,
-              nameKey: nameKey,
-            ));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditPage(
+                  data: data,
+                  index: index,
+                  nameController: _nameController,
+                  logController: _logController,
+                  passController: _passController,
+                  saveEdited: saveEdited,
+                  back: back,
+                  passKey: passKey,
+                  loginKey: logKey,
+                  nameKey: nameKey,
+                )));
   }
 
   void saveEdited() {
@@ -105,6 +124,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       Navigator.pop(context);
       uploadData();
       _nameController.clear();
+      _logController.clear();
       _passController.clear();
       data.boolUCL = false;
       data.boolSC = false;
@@ -117,6 +137,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Navigator.pop(context);
     setState(() {
       _nameController.clear();
+      _logController.clear();
       _passController.clear();
       data.boolUCL = false;
       data.boolSC = false;
@@ -127,18 +148,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   void saveInList() {
     setState(() {
-      if (nameKey.currentState!.validate() &&
-          passKey.currentState!.validate()) {
-        data.data.add([_nameController.text.trim(), _passController.text]);
-        Navigator.pop(context);
-        uploadData();
-        _nameController.clear();
-        _passController.clear();
-        data.boolUCL = false;
-        data.boolSC = false;
-        data.boolN = false;
-        data.passwordLenght = 0;
-      }
+      data.data.add([
+        _nameController.text.trim(),
+        _logController.text,
+        _passController.text,
+      ]);
+      Navigator.pop(context);
+      uploadData();
+      _nameController.clear();
+      _logController.clear();
+      _passController.clear();
+      data.boolUCL = false;
+      data.boolSC = false;
+      data.boolN = false;
+      data.passwordLenght = 0;
     });
   }
 
@@ -168,24 +191,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           itemBuilder: (context, index) {
             return Passwords(
               name: data.data[index][0],
-              password: data.data[index][1],
+              login: data.data[index][1],
+              password: data.data[index][2],
               editPassword: (context) => editPassword(index),
               deletePassword: (context) => deletePassword(index),
-              copyThePassword: () {
-                final copiedPass = ClipboardData(text: data.data[index][1]);
-                Clipboard.setData(copiedPass);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Password copied'),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 1),
-                ));
-              },
             );
           }),
       floatingActionButton: GestureDetector(
         onTap: createNewPass,
         child: Container(
-          margin: const EdgeInsets.only(left: 12, right: 12, bottom: 25),
+          margin: const EdgeInsets.only(left: 15, right: 15, bottom: 25),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).primaryColor),

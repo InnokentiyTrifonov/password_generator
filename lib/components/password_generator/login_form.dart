@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 
-class PassFormField extends StatefulWidget {
-  final TextEditingController passController;
-  final GlobalKey<FormState> passKey;
-  const PassFormField(
-      {super.key, required this.passKey, required this.passController});
+class LoginForm extends StatefulWidget {
+  final GlobalKey<FormState> loginKey;
+  final TextEditingController logController;
+  const LoginForm(
+      {super.key, required this.loginKey, required this.logController});
 
   @override
-  State<PassFormField> createState() => _PassFormFieldState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _PassFormFieldState extends State<PassFormField> {
+class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: widget.passKey,
+        key: widget.loginKey,
         child: Column(
           children: [
             TextFormField(
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Password is Empty';
+                  return 'Login is Empty';
                 } else if (value.contains(RegExp(r'\s'))) {
-                  return 'Enter correct password';
+                  return 'please enter the correct login';
                 } else {
                   return null;
                 }
               },
               maxLength: 25,
-              controller: widget.passController,
+              controller: widget.logController,
               autocorrect: false,
               decoration: const InputDecoration(
-                  hintText: 'Generated password',
+                  hintText: 'Your login',
                   focusedBorder: UnderlineInputBorder()),
             ),
           ],

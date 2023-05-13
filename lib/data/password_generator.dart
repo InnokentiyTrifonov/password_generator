@@ -39,19 +39,19 @@ class PasswordGenerator {
 
   String generatePassword() {
     if (boolUCL == true) {
-      password += upperCaseLetter;
+      password = upperCaseLetter + password;
     } else {
       password = password.replaceAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ', '');
     }
 
     if (boolN == true) {
-      password += number;
+      password = password + number;
     } else {
       password = password.replaceAll('123456789', '');
     }
 
     if (boolSC == true) {
-      password += specialChars;
+      password = password + specialChars;
     } else {
       password = password.replaceAll('<>,.?/[{[}+-=(*)!@#%^&"\$', '');
     }
